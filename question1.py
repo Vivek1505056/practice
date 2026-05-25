@@ -47,3 +47,17 @@ def describe_event(event: dict) -> str:
 print(describe_event({"src_ip": "185.220.101.5", "threat_score": 90, "country": "Russia"}))
 print(describe_event({"src_ip": "1.2.3.4", "threat_score": 30, "country": "Germany"}))
 print(describe_event({"threat_score": 90, "country":"Russia"}))
+
+def parse_threat_score(raw: object) -> int | None:
+    try:
+        return int(raw)
+    except(TypeError, ValueError):
+        return None
+    
+def enrich_event(event:dict) -> dict:
+    num = parse_threat_score(event.get('raw_score'))
+    return {**event, 'threat_score' : num}
+
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": "85"}))
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": "abc"}))
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": None}))
