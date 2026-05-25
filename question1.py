@@ -35,3 +35,29 @@ def get_threat_level(score: int) -> str:
 print(get_threat_level(95))
 print(get_threat_level(40))
 
+
+def describe_event(event: dict) -> str:
+    if not event.get('src_ip'):
+        return "event has no source IP"
+    elif event.get('threat_score') >= 75 and (event.get('country') == 'china' or event.get('country') == 'Russia'):
+        return "high risk event"
+    else:
+        return "standard event"
+    
+print(describe_event({"src_ip": "185.220.101.5", "threat_score": 90, "country": "Russia"}))
+print(describe_event({"src_ip": "1.2.3.4", "threat_score": 30, "country": "Germany"}))
+print(describe_event({"threat_score": 90, "country":"Russia"}))
+
+def parse_threat_score(raw: object) -> int | None:
+    try:
+        return int(raw)
+    except(TypeError, ValueError):
+        return None
+    
+def enrich_event(event:dict) -> dict:
+    num = parse_threat_score(event.get('raw_score'))
+    return {**event, 'threat_score' : num}
+
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": "85"}))
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": "abc"}))
+print(enrich_event({"src_ip": "1.2.3.4", "raw_score": None}))
