@@ -16,3 +16,22 @@ enriched = {**event, **geo_data}
 
 print(enriched.get('country'))
 
+def parse_ftp_log(logline: str, metadata: dict) -> dict | None:
+    if metadata.get('src_ip') == None:
+        return None
+    else:
+        return {**metadata, "protocol" : "FTP", 'logline' : logline}
+    
+print(parse_ftp_log("ftp login attempt",{"src_ip": "185.220.101.5", "username":"root"}))
+
+print(parse_ftp_log("ftp login attempt",{}))
+
+def get_threat_level(score: int) -> str:
+    if score >= 75:
+        return "high"
+    else:
+        return "low"
+    
+print(get_threat_level(95))
+print(get_threat_level(40))
+
