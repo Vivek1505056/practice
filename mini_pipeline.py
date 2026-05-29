@@ -88,7 +88,7 @@ class EventPipeline:
             
 enricher = ThreatEnricher(
     high_risk_usernames=["root", "admin"],
-  high_risk_countries=["Russia", "China"]
+    high_risk_countries=["Russia", "China"]
 )
 
 pipeline = EventPipeline(enricher=enricher)
